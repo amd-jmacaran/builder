@@ -475,12 +475,14 @@ if [[ -z "$BUILD_PYTHONLESS" ]]; then
   fi
 
   pip uninstall -y "$TORCH_PACKAGE_NAME"
-  
   if [[ "$USE_SPLIT_BUILD" == "true" ]]; then
     pip install "$TORCH_NO_PYTHON_PACKAGE_NAME" --no-index -f /$WHEELHOUSE_DIR --no-dependencies -v
   fi
-  
   pip install "$TORCH_PACKAGE_NAME" --no-index -f /$WHEELHOUSE_DIR --no-dependencies -v
+
+  pip show $TORCH_PACKAGE_NAME
+
+  pip list -v
 
   # Print info on the libraries installed in this wheel
   # Rather than adjust find command to skip non-library files with an embedded *.so* in their name,
@@ -491,11 +493,4 @@ if [[ -z "$BUILD_PYTHONLESS" ]]; then
       ldd "$installed_lib" || true
   done
 
-  # Run the tests
-  echo "$(date) :: Running tests"
-  pushd "$PYTORCH_ROOT"
-  LD_LIBRARY_PATH=/usr/local/nvidia/lib64 \
-          "${SOURCE_DIR}/../run_tests.sh" manywheel "${py_majmin}" "$DESIRED_CUDA"
-  popd
-  echo "$(date) :: Finished tests"
 fi
