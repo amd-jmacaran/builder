@@ -480,6 +480,10 @@ if [[ -z "$BUILD_PYTHONLESS" ]]; then
   fi
   pip install "$TORCH_PACKAGE_NAME" --no-index -f /$WHEELHOUSE_DIR --no-dependencies -v
 
+  pip show $TORCH_PACKAGE_NAME
+
+  pip list -v
+
   # Print info on the libraries installed in this wheel
   # Rather than adjust find command to skip non-library files with an embedded *.so* in their name,
   # since this is only for reporting purposes, we add the || true to the ldd command.
